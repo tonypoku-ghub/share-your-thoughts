@@ -41,6 +41,7 @@ module.exports = {
       user.save;
       return res.json(user);
     } catch (err) {
+      console.error(err);
       const user = await User.findOne({
         username: req.body.username,
       });

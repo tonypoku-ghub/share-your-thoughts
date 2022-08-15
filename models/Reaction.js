@@ -22,6 +22,7 @@ const reactionSchema = new mongoose.Schema(
       immutable: true,
       default: () => Date.now(),
       get: function (createdAt) {
+        //needs getters: true in toJSON section for this to work
         return moment(createdAt).format("MM-DD-YYYY HH:mm:ss");
       },
     },

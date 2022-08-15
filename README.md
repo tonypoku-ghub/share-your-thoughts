@@ -24,6 +24,14 @@ To install from Github, simple fork the project into your local drive. Install N
 
 To use this application, run npm init to prep your environment. Run npm install to install the node modules
 
+### Get API calls
+
+https://watch.screencastify.com/v/HM41g8qWwbpRIjnI4HCz
+
+### Post API calls
+
+https://watch.screencastify.com/v/EBHo4odan83ENBABAH0z
+
 ## License
 
 A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code.

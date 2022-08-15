@@ -15,6 +15,7 @@ const thoughtSchema = new mongoose.Schema(
       default: () => Date.now(),
       immutable: true,
       get: function (createdAt) {
+        //needs getters: true in toJSON section for this to work
         return moment(createdAt).format("MM-DD-YYYY HH:mm:ss");
       },
     },
@@ -31,8 +32,9 @@ const thoughtSchema = new mongoose.Schema(
     id: false,
   }
 );
-// thoughtSchema.virtual("formatcreatedAt").get(function () {
-//   return moment(this.createdAt).format("MM-DD-YYYY");
-// });
+
+thoughtSchema.virtual("reactionCount").get(function () {
+  return this.reactions.length;
+});
 
 module.exports = mongoose.model("Thought", thoughtSchema);
