@@ -22,7 +22,7 @@ module.exports = {
       return !thought
         ? res
             .status(404)
-            .json({ message: `No thought with ID ${eq.params.thoughtId}` })
+            .json({ message: `No thought with ID ${req.params.thoughtId}` })
         : res.json(thought);
     } catch (err) {
       console.error(err);

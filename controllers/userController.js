@@ -25,7 +25,7 @@ module.exports = {
 
       return !user
         ? res.status(404).json({
-            message: `No user found with with ID: ${eq.params.userId}`,
+            message: `No user found with with ID: ${req.params.userId}`,
           })
         : res.json(user);
     } catch (err) {
@@ -99,7 +99,7 @@ module.exports = {
   async updateUser(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.userId });
-      user.username = req.body.username;
+      // user.username = req.body.username;
       user.email = req.body.email;
 
       const updatedUser = await user.save();
