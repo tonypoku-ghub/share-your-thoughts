@@ -15,9 +15,8 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
       validate: {
-        validator: function (v) {
-          return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
-        },
+        validator: (v) =>
+          /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v),
         message: (props) => `${props.value} is not a valid email address`,
       },
     },
@@ -28,17 +27,11 @@ const userSchema = new mongoose.Schema(
     toJSON: {
       getters: true,
     },
-  },
-  {
-    virtuals: {
-      friendCount: {
-        get() {
-          return this.friends.length();
-        },
-      },
-    },
   }
 );
 
+userSchema.virtual("friendCount").get(function () {
+  return this.friends.length;
+});
+
 module.exports = mongoose.model("User", userSchema);
-60407001;

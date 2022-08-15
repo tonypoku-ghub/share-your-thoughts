@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 
-// Schema to create User model
 const reactionSchema = new mongoose.Schema(
   {
     reactionId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      default: () => new Types.ObjectId(),
+      default: () => new mongoose.Types.ObjectId(),
     },
     reactionBody: {
       type: String,
@@ -19,13 +19,18 @@ const reactionSchema = new mongoose.Schema(
     },
     createdAt: {
       type: Date,
-      default: Date.now(),
+      immutable: true,
+      default: () => Date.now(),
+      get: function (createdAt) {
+        return moment(createdAt).format("MM-DD-YYYY HH:mm:ss");
+      },
     },
   },
   {
     toJSON: {
       getters: true,
     },
+    id: false,
   }
 );
 

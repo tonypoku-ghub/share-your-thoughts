@@ -2,10 +2,15 @@ const { Thought, User } = require("../models");
 
 module.exports = {
   // Get all thoughts
-  getAllThoughts(req, res) {
-    Thought.find()
-      .then((thoughts) => res.json(thoughts))
-      .catch((err) => res.status(500).json(err));
+  async getAllThoughts(req, res) {
+    try {
+      const thoughts = await Thought.find().select("-__v");
+
+      return res.json(thoughts);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json(err);
+    }
   },
   // Get a Thought
   getSingleThought(req, res) {
@@ -43,6 +48,7 @@ module.exports = {
       { $set: req.body },
       { runValidators: true, new: true }
     )
+      .select("-__v")
       .then((thought) =>
         !thought
           ? res
@@ -61,8 +67,8 @@ module.exports = {
               .status(404)
               .json({ message: `No thought with Id ${req.params.thoughtId}` })
           : User.findOneAndUpdate(
-              { _id: req.params.userId },
-              { $pull: { thoughts: { thoughtId: req.params.thoughtId } } },
+              { username: thought.username },
+              { $pull: { thoughts: req.params.thoughtId } },
               { runValidators: true, new: true }
             )
       )
@@ -71,7 +77,7 @@ module.exports = {
   },
   // Add a reaction
   addReaction(req, res) {
-    Thought.findOne(
+    Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       { $addToSet: { reactions: req.body } },
       { runValidators: true, new: true }
@@ -87,11 +93,12 @@ module.exports = {
   },
   // delete a reaction
   deleteReaction(req, res) {
-    Thought.findOne(
+    Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
-      { $pull: { reactions: { _Id: req.body.reactionId } } },
+      { $pull: { reactions: req.params.reactionId } },
       { runValidators: true, new: true }
     )
+      .select("-__v")
       .then((thought) =>
         !thought
           ? res

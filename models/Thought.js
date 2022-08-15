@@ -12,9 +12,10 @@ const thoughtSchema = new mongoose.Schema(
     },
     createdAt: {
       type: Date,
-      default: Date.now(),
-      get: function (email) {
-        return moment(email).format("MM-DD-YYYY");
+      default: () => Date.now(),
+      immutable: true,
+      get: function (createdAt) {
+        return moment(createdAt).format("MM-DD-YYYY HH:mm:ss");
       },
     },
     username: {
@@ -24,21 +25,14 @@ const thoughtSchema = new mongoose.Schema(
     reactions: [reactionSchema],
   },
   {
-    virtuals: {
-      reactionCount: {
-        get() {
-          return this.reactions.length();
-        },
-      },
-    },
-  },
-  {
     toJSON: {
-      virtuals: true,
       getters: true,
     },
     id: false,
   }
 );
+// thoughtSchema.virtual("formatcreatedAt").get(function () {
+//   return moment(this.createdAt).format("MM-DD-YYYY");
+// });
 
 module.exports = mongoose.model("Thought", thoughtSchema);
