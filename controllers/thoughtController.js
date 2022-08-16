@@ -124,19 +124,34 @@ module.exports = {
   },
 
   // delete a reaction
+  // async deleteReaction(req, res) {
+  //   try {
+  //     const thought = await Thought.findOne({
+  //       _id: req.params.thoughtId,
+  //     });
+
+  //     await thought.reactions.pull(req.params.reactionId);
+
+  //     thought.save();
+
+  //     !thought
+  //       ? res
+  //           .status(404)
+  //           .json({ message: `No thought with ID ${req.params.thoughtId}` })
+  //       : res.json(thought);
+  //   } catch (err) {
+  //     console.error(err);
+  //     res.status(500).json(err);
+  //   }
+  // },
+
   async deleteReaction(req, res) {
     try {
-      const thought = await Thought.findOne({
-        _id: req.params.thoughtId,
-      }).select("-__v");
-
-      //await thought.reactions.pull({ reactionId: req.params.reactionId });
-      thought.update(
-        {},
-        { $pull: { reactions: { reactionId: req.param.reactionId } } }
+      const thought = await Thought.findByIdAndUpdate(
+        req.params.thoughtId,
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { runValidators: true, new: true }
       );
-
-      thought.save();
 
       !thought
         ? res
